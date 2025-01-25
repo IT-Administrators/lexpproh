@@ -54,8 +54,7 @@ std::string GetTokenKindName(TokenKind type)
 void PrintTokens(const std::vector<Token>& tokens)
 {  
     for (const auto& token : tokens) {
-        std::cout << "Type: " << GetTokenKindName(token.kind)
-             << ", Value: " << token.value << std::endl;
+        std::cout << GetTokenKindName(token.kind) << " (" << token.value << ")" << std::endl;
     }
 }
 

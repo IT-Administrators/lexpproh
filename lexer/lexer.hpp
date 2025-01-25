@@ -67,9 +67,8 @@ class Lexer {
             else if (MatchRegex(currentChar, std::regex("=")))
             {
                 std::string word = AdvanceN();
-                tokens.emplace_back(TokenKind::ASSIGNMENT, "None");
+                tokens.emplace_back(TokenKind::ASSIGNMENT, "");
             }
-            
         }
         return tokens;
     }
