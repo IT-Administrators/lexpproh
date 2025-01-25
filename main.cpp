@@ -22,17 +22,16 @@ int main() {
         std::string s(1, ch);
         Lexer lexer(s);
         std::vector<Token> tokens = lexer.tokenize();
-        printTokens(tokens);
+        PrintTokens(tokens);
     }
     
     // string s = "abcd";
     // Lexer lexer(s);
     // std::vector<Token> tokens = lexer.tokenize();
-    // printTokens(tokens);
+    // PrintTokens(tokens);
 
     // regex t("[a-zA-Z]");
     // cout << regex_match("T", t) << endl;
-
 
     testfile.close();  
 

@@ -15,6 +15,10 @@ lexpp module.
 // Token kinds which can be processed.
 enum class TokenKind {
     CHAR,
+    STRING,
+    NUMBER,
+    ASSIGNMENT,
+    IDENTIFIER,
 };
 
 // The struct of a token. Any token consists of a value and a token kind.
@@ -27,22 +31,30 @@ struct Token {
     {}
 };
 
-// Lookup table to get the right string for the specified tokenkind.
-std::string getTokenKindName(TokenKind type)
+// Get the right string to the provided token kind.
+std::string GetTokenKindName(TokenKind type)
 {
     switch (type) {
     case TokenKind::CHAR:
         return "CHAR";
+    case TokenKind::STRING:
+        return "STRING";
+    case TokenKind::NUMBER:
+        return "NUMBER";
+    case TokenKind::ASSIGNMENT:
+        return "ASSIGNMENT";
+    case TokenKind::IDENTIFIER:
+        return "IDENTIFIER";
     default:
         return "UNDEFINED";
     }
 }
 
 // Function to print all tokens
-void printTokens(const std::vector<Token>& tokens)
-{
+void PrintTokens(const std::vector<Token>& tokens)
+{  
     for (const auto& token : tokens) {
-        std::cout << "Type: " << getTokenKindName(token.kind)
+        std::cout << "Type: " << GetTokenKindName(token.kind)
              << ", Value: " << token.value << std::endl;
     }
 }

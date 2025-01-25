@@ -22,31 +22,21 @@ class Lexer {
         std::string input;
         size_t pos;
     
-    bool isWhitespace(char c) const{
-        std::regex ws("\\s+");
+    // Match any character agains regex pattern.
+    [[nodiscard]] const bool MatchRegex(const char c, std::regex p) {
         std::string s(1,c);
-        return std::regex_match(s, ws);
-        // return c == ' ' || c == '\t' || c == '\n' || c == '\r';
+        if (std::regex_match(s, p))
+        {
+            return true;
+        }
+        return false;
     }
 
-    bool isAlpha(char c){
-        std::regex an("[a-zA-Z]");
-        std::string s(1,c);
-        return std::regex_match(s, an);
-        // return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
-    }
-
-    bool isDigit(char c) {
-        std::regex dg("[0-9]");
-        std::string s(1,c);
-        return std::regex_match(s, dg);
-        // return c >= '0' && c <= '9';
-    }
-
-    std::string getNextWord()
+    // Advance current position by one.
+    std::string AdvanceN()
     {
         size_t start = pos;
-        while (pos < input.length() && isAlpha(input[pos])) {
+        while (pos < input.length()) {
             pos++;
         }
         return input.substr(start, pos - start);
@@ -60,10 +50,26 @@ class Lexer {
 
         while (pos < input.length()) {
             char currentChar = input[pos];
-            if (isAlpha(currentChar)) {
-                std::string word = getNextWord();
+            if (MatchRegex(currentChar, std::regex("[a-zA-Z]"))) {
+                std::string word = AdvanceN();
                 tokens.emplace_back(TokenKind::CHAR, word);
             }
+            else if (MatchRegex(currentChar, std::regex("\\s+")))
+            {
+                pos++;
+                continue;
+            }          
+            else if (MatchRegex(currentChar, std::regex("[0-9]")))
+            {
+                std::string word = AdvanceN();
+                tokens.emplace_back(TokenKind::NUMBER, word);
+            }
+            else if (MatchRegex(currentChar, std::regex("=")))
+            {
+                std::string word = AdvanceN();
+                tokens.emplace_back(TokenKind::ASSIGNMENT, "None");
+            }
+            
         }
         return tokens;
     }
