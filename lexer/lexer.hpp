@@ -22,7 +22,7 @@ class Lexer {
         std::string input;
         size_t pos;
     
-    // Match any character agains regex pattern.
+    // Match any character against regex pattern.
     [[nodiscard]] const bool MatchRegex(const char c, std::regex p) {
         std::string s(1,c);
         if (std::regex_match(s, p))
@@ -42,13 +42,21 @@ class Lexer {
         return input.substr(start, pos - start);
     }
 
+    // Check if we have reached EOF.
+    const bool AtEof(){
+        return Lexer::pos >= Lexer::input.length();        
+    }
+
+    const std::string Remainder(){
+        return Lexer::input.substr(Lexer::pos, Lexer::input.length());
+    }
+
     public:
-    // Function to tokenize the input string
+    // Function to tokenize the input string.
     std::vector<Token> tokenize()
     {
         std::vector<Token> tokens;
-
-        while (pos < input.length()) {
+        while (!AtEof()) {
             char currentChar = input[pos];
             if (MatchRegex(currentChar, std::regex("[a-zA-Z]"))) {
                 std::string word = AdvanceN();
@@ -68,7 +76,7 @@ class Lexer {
             {
                 std::string word = AdvanceN();
                 tokens.emplace_back(TokenKind::ASSIGNMENT, "");
-            }
+            }          
         }
         return tokens;
     }

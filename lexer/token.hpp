@@ -19,6 +19,8 @@ enum class TokenKind {
     NUMBER,
     ASSIGNMENT,
     IDENTIFIER,
+
+    _UNDEFINED
 };
 
 // The struct of a token. Any token consists of a value and a token kind.
