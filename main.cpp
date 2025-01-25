@@ -25,7 +25,6 @@ int main() {
         PrintTokens(tokens);
     }
     
-    
     // string s = "abcd";
     // Lexer lexer(s);
     // std::vector<Token> tokens = lexer.tokenize();

@@ -33,7 +33,7 @@ class Lexer {
     }
 
     // Advance current position by one.
-    std::string AdvanceN()
+    [[nodiscard]] std::string AdvanceN()
     {
         size_t start = pos;
         while (pos < input.length()) {
@@ -43,21 +43,21 @@ class Lexer {
     }
 
     // Check if we have reached EOF.
-    const bool AtEof(){
+    [[nodiscard]] const bool AtEof(){
         return Lexer::pos >= Lexer::input.length();        
     }
 
-    const std::string Remainder(){
+    [[nodiscard]] const std::string Remainder(){
         return Lexer::input.substr(Lexer::pos, Lexer::input.length());
     }
 
     public:
     // Function to tokenize the input string.
-    std::vector<Token> tokenize()
+    [[nodiscard]] std::vector<Token> tokenize()
     {
         std::vector<Token> tokens;
         while (!AtEof()) {
-            char currentChar = input[pos];
+            char currentChar = input.at(pos);
             if (MatchRegex(currentChar, std::regex("[a-zA-Z]"))) {
                 std::string word = AdvanceN();
                 tokens.emplace_back(TokenKind::CHAR, word);
