@@ -1,6 +1,6 @@
 /*
 This header file contains the function/method declarations for the
-lexpp module.
+lexpproh module.
 */
 
 // Conditional pre processor directive.
@@ -10,8 +10,8 @@ lexpp module.
 
 #include <string>
 #include <vector>
-#include <unordered_map>
-#include <regex>
+#include <iostream>
+#include <sstream>
 
 #include "token.hpp"
 
@@ -20,26 +20,47 @@ class Lexer {
     private:
         // String to be processed.
         std::string input;
-        size_t pos;
-    
-    // Match any character against regex pattern.
-    [[nodiscard]] const bool MatchRegex(const char c, std::regex p) {
-        std::string s(1,c);
-        if (std::regex_match(s, p))
+        // Current position.
+        int pos;
+        // Current character.
+        char currentCharacter;
+        // Size of input.
+        int size;
+        // Linenumber if text contains newline characters.
+        int lineNumber;
+        // Characternumber per line.
+        int characterNumber;
+
+    // Return character at current position and advance position by 1.
+    const char Advance() {
+        if (pos < size)
         {
-            return true;
+            // Save current character.
+            char temp = currentCharacter;
+            pos++;
+            // Advance character number to keep track of it.
+            characterNumber++;
+            currentCharacter = (pos < size) ? input[pos] : '\0';
+            return temp;
         }
-        return false;
+        else
+        {
+            return '\0';
+        }
     }
 
-    // Advance current position by one.
-    [[nodiscard]] std::string AdvanceN()
-    {
-        size_t start = pos;
-        while (pos < input.length()) {
-            pos++;
+    // Skip blank characters.
+    void Skip() {
+        while (currentCharacter == ' ' || currentCharacter == '\n' || currentCharacter == '\t' || currentCharacter == '\r')
+        {
+            // Tracking the current position.
+            if (currentCharacter == '\n')
+            {
+                lineNumber++;
+                characterNumber = 1;
+            }
+            Advance();
         }
-        return input.substr(start, pos - start);
     }
 
     // Check if we have reached EOF.
@@ -47,44 +68,92 @@ class Lexer {
         return Lexer::pos >= Lexer::input.length();        
     }
 
-    [[nodiscard]] const std::string Remainder(){
-        return Lexer::input.substr(Lexer::pos, Lexer::input.length());
+    // Tokenize identifiers. Identifiers are strings which are not enclosed in "".
+    Token* TokenizeIdentifier() {
+        std::stringstream buffer;
+        // Append character to buffer.
+        buffer << Advance();
+
+        while (isalnum(currentCharacter) || currentCharacter == '_')
+        {
+            // Append all other characters to buffer.
+            buffer << Advance();
+        }
+        
+        Token* newToken = new Token();
+        newToken->kind = IDENTIFIER;
+        newToken->value = buffer.str();
+
+        return newToken;
+    }
+    // Tokenize integers.
+    Token* TokenizeInt() {
+        std::stringstream buffer;
+        while (isdigit(currentCharacter))
+        {
+            buffer << Advance();
+        }
+        
+        Token* newToken = new Token();
+        newToken->kind = INT;
+        newToken->value = buffer.str();
+        return newToken;
+    }
+
+    // Tokenize special characters. Appends current character and specified tokenkind to vector.
+    Token* TokenizeSpecial(enum type kind){
+        Token* newToken = new Token();
+        newToken->kind = kind;
+        newToken->value = std::string(1, Advance());
+
+        return newToken;
     }
 
     public:
+    // Lexer constructor.
+    Lexer(std::string source)
+    : input(source), pos(0), size(source.length()), currentCharacter(source.at(pos)), lineNumber(1), characterNumber(1)
+    {}
+
     // Function to tokenize the input string.
-    [[nodiscard]] std::vector<Token> tokenize()
+    [[nodiscard]] std::vector<Token*> tokenize()
     {
-        std::vector<Token> tokens;
-        while (!AtEof()) {
-            char currentChar = input.at(pos);
-            if (MatchRegex(currentChar, std::regex("[a-zA-Z]"))) {
-                std::string word = AdvanceN();
-                tokens.emplace_back(TokenKind::CHAR, word);
-            }
-            else if (MatchRegex(currentChar, std::regex("\\s+")))
+        // Result vector.
+        std::vector<Token*> tokens;
+        while (!AtEof())
+        {
+            Skip();
+            if (isalpha(currentCharacter) || currentCharacter == '_')
             {
-                pos++;
+                tokens.push_back(TokenizeIdentifier());
                 continue;
-            }          
-            else if (MatchRegex(currentChar, std::regex("[0-9]")))
-            {
-                std::string word = AdvanceN();
-                tokens.emplace_back(TokenKind::NUMBER, word);
             }
-            else if (MatchRegex(currentChar, std::regex("=")))
+            if (isdigit(currentCharacter))
             {
-                std::string word = AdvanceN();
-                tokens.emplace_back(TokenKind::ASSIGNMENT, "");
-            }          
+                tokens.push_back(TokenizeInt());
+                continue;
+            }
+            switch (currentCharacter)
+            {
+            case ';':
+                tokens.push_back(TokenizeSpecial(SEMI_COLON));
+                break;
+            case '=':
+                tokens.push_back(TokenizeSpecial(EQUALS));
+                break;
+            case '(':
+                tokens.push_back(TokenizeSpecial(OPEN_PAREN));
+                break;
+            case ')':
+                tokens.push_back(TokenizeSpecial(CLOSE_PAREN));
+                break;          
+            default:
+                std::cout << "UNIDENTIFIED: " << "(" << std::string(1,currentCharacter) << ")" << " ";
+                std::cout << "LINE NUMBER: " << lineNumber << " " << "CHARACTER NUMBER: " << characterNumber << std::endl;
+                exit(1);
+            }
         }
         return tokens;
     }
-
-    // Lexer constructor.
-    Lexer(const std::string& source)
-        : input(source) , pos(0)
-    {}
 };
-
 #endif

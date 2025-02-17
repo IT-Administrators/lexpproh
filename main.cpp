@@ -11,29 +11,18 @@ using namespace std;
 
 int main() {
 
-    char ch;
-    std::ifstream testfile;
-    // Create stream object of text.
-    testfile.open("./examples/test01");
-    
-    // Read file char by char.
-    while (testfile.get(ch))
+    std::ifstream sourcefilestream("./examples/test02.txt");
+    std::stringstream buffer;
+    char temp;
+
+    while (sourcefilestream.get(temp))
     {
-        std::string s(1, ch);
-        Lexer lexer(s);
-        std::vector<Token> tokens = lexer.tokenize();
-        PrintTokens(tokens);
+        buffer << temp;
     }
-    
-    // string s = "abcd";
-    // Lexer lexer(s);
-    // std::vector<Token> tokens = lexer.tokenize();
-    // PrintTokens(tokens);
-
-    // regex t("[a-zA-Z]");
-    // cout << regex_match("T", t) << endl;
-
-    testfile.close();  
+    std::string sourceCode = buffer.str();
+    Lexer lexer(sourceCode);
+    std::vector<Token *> tokens = lexer.tokenize();
+    PrintTokens(tokens);
 
     return 0;
 }

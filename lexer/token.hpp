@@ -1,6 +1,6 @@
 /*
 This header file contains the function/method declarations for the
-lexpp module.
+lexpproh module.
 */
 
 // Conditional pre processor directive.
@@ -10,53 +10,65 @@ lexpp module.
 
 #include <string>
 #include <vector>
-#include <iostream>
 
 // Token kinds which can be processed.
-enum class TokenKind {
-    CHAR,
-    STRING,
-    NUMBER,
-    ASSIGNMENT,
+enum type {
+    
+    KEYWORD,
     IDENTIFIER,
+    INT,
+    STRING,
+      
+    // Assignment character.
+    EQUALS,
 
-    _UNDEFINED
+    SEMI_COLON,
+
+    // Grouping tokens.
+    OPEN_PAREN,
+    CLOSE_PAREN,
+
+    UNKNOWN
 };
 
 // The struct of a token. Any token consists of a value and a token kind.
 struct Token {
     std::string value;
-    TokenKind kind;
-
-    Token(TokenKind k, const std::string& v)
-        : kind(k), value(v)
-    {}
+    enum type kind;
 };
 
-// Get the right string to the provided token kind.
-std::string GetTokenKindName(TokenKind type)
+// Convert TokenKind to string. The returned string is the 
+// classification of the current token.
+std::string GetTokenKindName(enum type kind)
 {
-    switch (type) {
-    case TokenKind::CHAR:
-        return "CHAR";
-    case TokenKind::STRING:
-        return "STRING";
-    case TokenKind::NUMBER:
-        return "NUMBER";
-    case TokenKind::ASSIGNMENT:
-        return "ASSIGNMENT";
-    case TokenKind::IDENTIFIER:
+    switch (kind) {
+    case KEYWORD:
+        return "KEYWORD";
+    case IDENTIFIER:
         return "IDENTIFIER";
+    case INT:
+        return "INT";
+    case STRING:
+        return "STRING";
+    case EQUALS:
+        return "EQUALS";
+    case SEMI_COLON:
+        return "SEMI_COLON";
+    case OPEN_PAREN:
+        return "OPEN_PAREN";
+    case CLOSE_PAREN:
+        return "CLOSE_PAREN";
     default:
-        return "UNDEFINED";
+        return "UNKNOWN";
     }
 }
 
-// Function to print all tokens
-void PrintTokens(const std::vector<Token>& tokens)
-{  
-    for (const auto& token : tokens) {
-        std::cout << GetTokenKindName(token.kind) << " (" << token.value << ")" << std::endl;
+// Print tokens.
+void PrintTokens(std::vector<Token*> tokens) {
+    int counter = 0;
+    for (Token* temp : tokens) {
+        counter++;
+        std::cout << counter << ")" << " " << GetTokenKindName(temp->kind) << " " << "(" << temp->value << ")" << std::endl;
     }
 }
 
