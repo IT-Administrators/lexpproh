@@ -12,6 +12,7 @@ lexpproh module.
 #include <vector>
 #include <iostream>
 #include <sstream>
+#include <unordered_map>
 
 #include "token.hpp"
 
@@ -30,6 +31,11 @@ class Lexer {
         int lineNumber;
         // Characternumber per line.
         int characterNumber;
+        // Map of keywords.
+        std::unordered_map<std::string,TokenKind> keymap {
+            {"return", TokenKind::KEYWORD},
+            {"print", TokenKind::KEYWORD},
+        };
 
     // Return character at current position and advance position by 1.
     const char Advance() {
@@ -47,6 +53,16 @@ class Lexer {
         {
             return '\0';
         }
+    }
+
+    // Check if key is in keyword map. Return false if not.
+    [[nodiscard]] const bool CheckKey(std::unordered_map <std::string, TokenKind> m, std::string key){
+        // If key is not present in map.
+        if (m.find(key) == m.end())
+        {
+            return false;
+        }
+        return true; 
     }
 
     // Skip blank characters.
@@ -69,7 +85,7 @@ class Lexer {
     }
 
     // Tokenize identifiers. Identifiers are strings which are not enclosed in "".
-    Token* TokenizeIdentifier() {
+    [[nodiscard]] const Token TokenizeIdentifier() {
         std::stringstream buffer;
         // Append character to buffer.
         buffer << Advance();
@@ -79,34 +95,26 @@ class Lexer {
             // Append all other characters to buffer.
             buffer << Advance();
         }
-        
-        Token* newToken = new Token();
-        newToken->kind = IDENTIFIER;
-        newToken->value = buffer.str();
-
-        return newToken;
+        // Check if identified token equals keyword.
+        if (CheckKey(keymap, buffer.str()))
+        {
+            return NewToken(TokenKind::KEYWORD, buffer.str());
+        }
+        return NewToken(TokenKind::IDENTIFIER, buffer.str());
     }
     // Tokenize integers.
-    Token* TokenizeInt() {
+    [[nodiscard]] const Token TokenizeInt() {
         std::stringstream buffer;
         while (isdigit(currentCharacter))
         {
             buffer << Advance();
         }
-        
-        Token* newToken = new Token();
-        newToken->kind = INT;
-        newToken->value = buffer.str();
-        return newToken;
+        return NewToken(TokenKind::INT, buffer.str());
     }
 
     // Tokenize special characters. Appends current character and specified tokenkind to vector.
-    Token* TokenizeSpecial(enum type kind){
-        Token* newToken = new Token();
-        newToken->kind = kind;
-        newToken->value = std::string(1, Advance());
-
-        return newToken;
+    [[nodiscard]] const Token TokenizeSpecial(TokenKind kind){
+        return NewToken(kind, std::string(1,Advance()));
     }
 
     public:
@@ -116,10 +124,10 @@ class Lexer {
     {}
 
     // Function to tokenize the input string.
-    [[nodiscard]] std::vector<Token*> tokenize()
+    [[nodiscard]] std::vector<Token> tokenize()
     {
         // Result vector.
-        std::vector<Token*> tokens;
+        std::vector<Token> tokens;
         while (!AtEof())
         {
             Skip();
@@ -136,16 +144,16 @@ class Lexer {
             switch (currentCharacter)
             {
             case ';':
-                tokens.push_back(TokenizeSpecial(SEMI_COLON));
+                tokens.push_back(TokenizeSpecial(TokenKind::SEMI_COLON));
                 break;
             case '=':
-                tokens.push_back(TokenizeSpecial(EQUALS));
+                tokens.push_back(TokenizeSpecial(TokenKind::EQUALS));
                 break;
             case '(':
-                tokens.push_back(TokenizeSpecial(OPEN_PAREN));
+                tokens.push_back(TokenizeSpecial(TokenKind::OPEN_PAREN));
                 break;
             case ')':
-                tokens.push_back(TokenizeSpecial(CLOSE_PAREN));
+                tokens.push_back(TokenizeSpecial(TokenKind::CLOSE_PAREN));
                 break;          
             default:
                 std::cout << "UNIDENTIFIED: " << "(" << std::string(1,currentCharacter) << ")" << " ";

@@ -21,7 +21,7 @@ int main() {
     }
     std::string sourceCode = buffer.str();
     Lexer lexer(sourceCode);
-    std::vector<Token *> tokens = lexer.tokenize();
+    std::vector<Token> tokens = lexer.tokenize();
     PrintTokens(tokens);
 
     return 0;

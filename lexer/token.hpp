@@ -12,7 +12,7 @@ lexpproh module.
 #include <vector>
 
 // Token kinds which can be processed.
-enum type {
+enum class TokenKind {
     
     KEYWORD,
     IDENTIFIER,
@@ -34,29 +34,35 @@ enum type {
 // The struct of a token. Any token consists of a value and a token kind.
 struct Token {
     std::string value;
-    enum type kind;
+    TokenKind kind;
 };
+
+// Create a new token to append it to result vector.
+const Token NewToken(TokenKind kind, std::string value){
+    Token token{.value = value, .kind = kind};
+    return token;
+}
 
 // Convert TokenKind to string. The returned string is the 
 // classification of the current token.
-std::string GetTokenKindName(enum type kind)
+std::string GetTokenKindName(TokenKind kind)
 {
     switch (kind) {
-    case KEYWORD:
+    case TokenKind::KEYWORD:
         return "KEYWORD";
-    case IDENTIFIER:
+    case TokenKind::IDENTIFIER:
         return "IDENTIFIER";
-    case INT:
+    case TokenKind::INT:
         return "INT";
-    case STRING:
+    case TokenKind::STRING:
         return "STRING";
-    case EQUALS:
+    case TokenKind::EQUALS:
         return "EQUALS";
-    case SEMI_COLON:
+    case TokenKind::SEMI_COLON:
         return "SEMI_COLON";
-    case OPEN_PAREN:
+    case TokenKind::OPEN_PAREN:
         return "OPEN_PAREN";
-    case CLOSE_PAREN:
+    case TokenKind::CLOSE_PAREN:
         return "CLOSE_PAREN";
     default:
         return "UNKNOWN";
@@ -64,11 +70,11 @@ std::string GetTokenKindName(enum type kind)
 }
 
 // Print tokens.
-void PrintTokens(std::vector<Token*> tokens) {
+void PrintTokens(std::vector<Token> tokens) {
     int counter = 0;
-    for (Token* temp : tokens) {
+    for (Token temp : tokens) {
         counter++;
-        std::cout << counter << ")" << " " << GetTokenKindName(temp->kind) << " " << "(" << temp->value << ")" << std::endl;
+        std::cout << counter << ")" << " " << GetTokenKindName(temp.kind) << " " << "(" << temp.value<< ")" << std::endl;
     }
 }
 
