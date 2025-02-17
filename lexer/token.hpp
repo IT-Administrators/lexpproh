@@ -22,7 +22,14 @@ enum class TokenKind {
     // Assignment character.
     EQUALS,
 
+    // Delimiter/Separator characters.
     SEMI_COLON,
+    COLON,
+    COMMA,
+    DOT,
+
+    // Comments
+    HASHTAG,
 
     // Grouping tokens.
     OPEN_PAREN,
@@ -60,6 +67,14 @@ std::string GetTokenKindName(TokenKind kind)
         return "EQUALS";
     case TokenKind::SEMI_COLON:
         return "SEMI_COLON";
+    case TokenKind::COLON:
+        return "COLON";
+    case TokenKind::COMMA:
+        return "COMMA";
+    case TokenKind::DOT:
+        return "DOT";
+    case TokenKind::HASHTAG:
+        return "HASHTAG";
     case TokenKind::OPEN_PAREN:
         return "OPEN_PAREN";
     case TokenKind::CLOSE_PAREN:

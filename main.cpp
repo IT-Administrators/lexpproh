@@ -11,7 +11,7 @@ using namespace std;
 
 int main() {
 
-    std::ifstream sourcefilestream("./examples/test02.txt");
+    std::ifstream sourcefilestream("./examples/test01.txt");
     std::stringstream buffer;
     char temp;
 

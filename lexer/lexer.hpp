@@ -13,6 +13,7 @@ lexpproh module.
 #include <iostream>
 #include <sstream>
 #include <unordered_map>
+#include <regex>
 
 #include "token.hpp"
 
@@ -33,8 +34,11 @@ class Lexer {
         int characterNumber;
         // Map of keywords.
         std::unordered_map<std::string,TokenKind> keymap {
-            {"return", TokenKind::KEYWORD},
-            {"print", TokenKind::KEYWORD},
+            {"import", TokenKind::KEYWORD},
+            {"from", TokenKind::KEYWORD},
+            {"def", TokenKind::KEYWORD},
+            {"str", TokenKind::KEYWORD},
+            {"pass", TokenKind::KEYWORD},
         };
 
     // Return character at current position and advance position by 1.
@@ -102,6 +106,7 @@ class Lexer {
         }
         return NewToken(TokenKind::IDENTIFIER, buffer.str());
     }
+
     // Tokenize integers.
     [[nodiscard]] const Token TokenizeInt() {
         std::stringstream buffer;
@@ -110,6 +115,16 @@ class Lexer {
             buffer << Advance();
         }
         return NewToken(TokenKind::INT, buffer.str());
+    }
+    
+    // Tokenize comments to ignore them. Uses a regular expression to match comments.
+    // A comment can contain any symbol except newlines.
+    void TokenizeComment() {
+        // Match any character except newlines. 
+        while (std::regex_match(std::string(1,currentCharacter), std::regex(".+")))
+        {
+            Advance();
+        }
     }
 
     // Tokenize special characters. Appends current character and specified tokenkind to vector.
@@ -140,11 +155,23 @@ class Lexer {
             {
                 tokens.push_back(TokenizeInt());
                 continue;
-            }
+            }          
             switch (currentCharacter)
             {
+            case '#':
+                TokenizeComment();
+                break;
             case ';':
                 tokens.push_back(TokenizeSpecial(TokenKind::SEMI_COLON));
+                break;
+            case ':':
+                tokens.push_back(TokenizeSpecial(TokenKind::COLON));
+                break;
+            case ',':
+                tokens.push_back(TokenizeSpecial(TokenKind::COMMA));
+                break;
+            case '.':
+                tokens.push_back(TokenizeSpecial(TokenKind::DOT));
                 break;
             case '=':
                 tokens.push_back(TokenizeSpecial(TokenKind::EQUALS));
