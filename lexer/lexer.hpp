@@ -60,8 +60,8 @@ class Lexer {
     }
 
     // Check if key is in keyword map. Return false if not.
-    [[nodiscard]] const bool CheckKey(std::unordered_map <std::string, TokenKind> m, std::string key){
-        // If key is not present in map.
+    [[nodiscard]] const bool CheckKey(std::unordered_map<std::string, TokenKind> m, std::string key){
+        // If key is not present in map return false.
         if (m.find(key) == m.end())
         {
             return false;
