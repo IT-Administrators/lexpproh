@@ -1,0 +1,3 @@
+let bar = foo * 10 + (45 / 10 - -5);
+let bar: number = -10 + 5;
+let bar: []number = 10;

@@ -28,12 +28,20 @@ enum class TokenKind {
     COMMA,
     DOT,
 
+    //Operator
+    MULT,
+    PLUS,
+    MINUS,
+    SLASH,
+
     // Comments
     HASHTAG,
 
     // Grouping tokens.
     OPEN_PAREN,
     CLOSE_PAREN,
+    OPEN_BRACK,
+    CLOSE_BRACK,
 
     UNKNOWN
 };
@@ -73,12 +81,24 @@ std::string GetTokenKindName(TokenKind kind)
         return "COMMA";
     case TokenKind::DOT:
         return "DOT";
+    case TokenKind::MULT:
+        return "MULT";
+    case TokenKind::PLUS:
+        return "PLUS";
+    case TokenKind::MINUS:
+        return "MINUS";
+    case TokenKind::SLASH:
+        return "SLASH";
     case TokenKind::HASHTAG:
         return "HASHTAG";
     case TokenKind::OPEN_PAREN:
         return "OPEN_PAREN";
     case TokenKind::CLOSE_PAREN:
         return "CLOSE_PAREN";
+    case TokenKind::OPEN_BRACK:
+        return "OPEN_BRACK";
+    case TokenKind::CLOSE_BRACK:
+        return "CLOSE_BRACK";
     default:
         return "UNKNOWN";
     }

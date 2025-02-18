@@ -173,6 +173,18 @@ class Lexer {
             case '.':
                 tokens.push_back(TokenizeSpecial(TokenKind::DOT));
                 break;
+            case '*':
+                tokens.push_back(TokenizeSpecial(TokenKind::MULT));
+                break;
+            case '+':
+                tokens.push_back(TokenizeSpecial(TokenKind::PLUS));
+                break;
+            case '-':
+                tokens.push_back(TokenizeSpecial(TokenKind::MINUS));
+                break;
+            case '/':
+                tokens.push_back(TokenizeSpecial(TokenKind::SLASH));
+                break;
             case '=':
                 tokens.push_back(TokenizeSpecial(TokenKind::EQUALS));
                 break;
@@ -181,6 +193,12 @@ class Lexer {
                 break;
             case ')':
                 tokens.push_back(TokenizeSpecial(TokenKind::CLOSE_PAREN));
+                break;
+            case '[':
+                tokens.push_back(TokenizeSpecial(TokenKind::OPEN_BRACK));
+                break;
+            case ']':
+                tokens.push_back(TokenizeSpecial(TokenKind::CLOSE_BRACK));
                 break;          
             default:
                 std::cout << "UNIDENTIFIED: " << "(" << std::string(1,currentCharacter) << ")" << " ";
