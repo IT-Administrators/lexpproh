@@ -1,0 +1,5 @@
+# Check if number is greater zero.
+def is_greater_zero(number: int):
+    if number > 0:
+        return true
+    return false

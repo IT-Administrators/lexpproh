@@ -33,6 +33,8 @@ enum class TokenKind {
     PLUS,
     MINUS,
     SLASH,
+    LESSER,
+    GREATER,
 
     // Comments
     HASHTAG,
@@ -42,6 +44,8 @@ enum class TokenKind {
     CLOSE_PAREN,
     OPEN_BRACK,
     CLOSE_BRACK,
+    OPEN_CURLY,
+    CLOSE_CURLY,
 
     UNKNOWN
 };
@@ -89,6 +93,10 @@ std::string GetTokenKindName(TokenKind kind)
         return "MINUS";
     case TokenKind::SLASH:
         return "SLASH";
+    case TokenKind::LESSER:
+        return "LESSER";
+    case TokenKind::GREATER:
+        return "GREATER";
     case TokenKind::HASHTAG:
         return "HASHTAG";
     case TokenKind::OPEN_PAREN:
@@ -99,6 +107,10 @@ std::string GetTokenKindName(TokenKind kind)
         return "OPEN_BRACK";
     case TokenKind::CLOSE_BRACK:
         return "CLOSE_BRACK";
+    case TokenKind::OPEN_CURLY:
+        return "OPEN_CURLY";
+    case TokenKind::CLOSE_CURLY:
+        return "CLOSE_CURLY";
     default:
         return "UNKNOWN";
     }

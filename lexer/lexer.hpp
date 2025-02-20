@@ -39,6 +39,8 @@ class Lexer {
             {"def", TokenKind::KEYWORD},
             {"str", TokenKind::KEYWORD},
             {"pass", TokenKind::KEYWORD},
+            {"return", TokenKind::KEYWORD},
+            {"int", TokenKind::KEYWORD},
         };
 
     // Return character at current position and advance position by 1.
@@ -185,6 +187,12 @@ class Lexer {
             case '/':
                 tokens.push_back(TokenizeSpecial(TokenKind::SLASH));
                 break;
+            case '<':
+                tokens.push_back(TokenizeSpecial(TokenKind::LESSER));
+                break;
+            case '>':
+                tokens.push_back(TokenizeSpecial(TokenKind::GREATER));
+                break;
             case '=':
                 tokens.push_back(TokenizeSpecial(TokenKind::EQUALS));
                 break;
@@ -199,7 +207,13 @@ class Lexer {
                 break;
             case ']':
                 tokens.push_back(TokenizeSpecial(TokenKind::CLOSE_BRACK));
-                break;          
+                break;
+            case '{':
+                tokens.push_back(TokenizeSpecial(TokenKind::OPEN_CURLY));
+                break;
+            case '}':
+                tokens.push_back(TokenizeSpecial(TokenKind::CLOSE_CURLY));
+                break;              
             default:
                 std::cout << "UNIDENTIFIED: " << "(" << std::string(1,currentCharacter) << ")" << " ";
                 std::cout << "LINE NUMBER: " << lineNumber << " " << "CHARACTER NUMBER: " << characterNumber << std::endl;
