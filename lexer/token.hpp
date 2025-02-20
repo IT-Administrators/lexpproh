@@ -17,6 +17,7 @@ enum class TokenKind {
     KEYWORD,
     IDENTIFIER,
     INT,
+    FLOAT,
     STRING,
       
     // Assignment character.
@@ -73,6 +74,8 @@ std::string GetTokenKindName(TokenKind kind)
         return "IDENTIFIER";
     case TokenKind::INT:
         return "INT";
+    case TokenKind::FLOAT:
+        return "FLOAT";
     case TokenKind::STRING:
         return "STRING";
     case TokenKind::EQUALS:

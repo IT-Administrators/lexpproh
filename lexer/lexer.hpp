@@ -109,12 +109,17 @@ class Lexer {
         return NewToken(TokenKind::IDENTIFIER, buffer.str());
     }
 
-    // Tokenize integers.
-    [[nodiscard]] const Token TokenizeInt() {
+    // Tokenize Numbers. Differentiate between int and float.
+    [[nodiscard]] const Token TokenizeNumber() {
         std::stringstream buffer;
-        while (isdigit(currentCharacter))
+        while (isdigit(currentCharacter) || currentCharacter == '.' || currentCharacter == ',')
         {
             buffer << Advance();
+        }
+        // This delimiter must be changed depending on how floats are defined.
+        if (buffer.str().find(',') != std::string::npos)
+        {
+            return NewToken(TokenKind::FLOAT, buffer.str());
         }
         return NewToken(TokenKind::INT, buffer.str());
     }
@@ -155,7 +160,7 @@ class Lexer {
             }
             if (isdigit(currentCharacter))
             {
-                tokens.push_back(TokenizeInt());
+                tokens.push_back(TokenizeNumber());
                 continue;
             }          
             switch (currentCharacter)
