@@ -266,6 +266,12 @@ class Lexer {
             case '=':
                 tokens.push_back(TokenizeSpecial(TokenKind::EQUALS));
                 break;
+            case '%':
+                tokens.push_back(TokenizeSpecial(TokenKind::MODULO));
+                break;
+            case '&':
+                tokens.push_back(TokenizeSpecial(TokenKind::AMPERSAND));
+                break;
             case '(':
                 tokens.push_back(TokenizeSpecial(TokenKind::OPEN_PAREN));
                 break;

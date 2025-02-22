@@ -36,6 +36,9 @@ enum class TokenKind {
     SLASH,
     LESSER,
     GREATER,
+    MODULO,
+
+    AMPERSAND,
 
     // Comments
     HASHTAG,
@@ -104,6 +107,10 @@ std::string GetTokenKindName(TokenKind kind)
         return "LESSER";
     case TokenKind::GREATER:
         return "GREATER";
+    case TokenKind::MODULO:
+        return "MODULO";
+    case TokenKind::AMPERSAND:
+        return "AMPERSAND";
     case TokenKind::HASHTAG:
         return "HASHTAG";
     case TokenKind::OPEN_PAREN:
