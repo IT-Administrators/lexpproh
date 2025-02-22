@@ -61,6 +61,19 @@ class Lexer {
         }
     }
 
+    // Return next character. Dont advance position.
+    const char LookAhead() {
+
+        if (pos < size)
+        {
+            return input[pos +1];
+        }
+        else 
+        {
+            return '\0';
+        }
+    }
+
     // Check if key is in keyword map. Return false if not.
     [[nodiscard]] const bool CheckKey(std::unordered_map<std::string, TokenKind> m, std::string key){
         // If key is not present in map return false.
@@ -119,15 +132,17 @@ class Lexer {
     }
 
     // Tokenize Numbers. Differentiate between int and float.
+    // Floats are decimal numbers with "." as separator.
+    // 3.5 = FLOAT (3.5), 3,5 = INT (3), INT (5).   
     [[nodiscard]] const Token TokenizeNumber() {
         std::stringstream buffer;
-        while (isdigit(currentCharacter) || currentCharacter == '.' || currentCharacter == ',')
+        while (isdigit(currentCharacter) || currentCharacter == '.')
         {
             buffer << Advance();
         }
         // This delimiter must be changed depending on how floats are defined.
-        if (buffer.str().find(',') != std::string::npos)
-        {
+        if (buffer.str().find('.') != std::string::npos)
+        {                     
             return NewToken(TokenKind::FLOAT, buffer.str());
         }
         return NewToken(TokenKind::INT, buffer.str());

@@ -1,4 +1,5 @@
-number1 = 141.250,41;
+number1 = 141.250;
+number3 = [125.5, 126, 275]
 141 = number1;
 _number_2 = 27;
 print(number1);
