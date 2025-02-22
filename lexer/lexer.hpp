@@ -218,7 +218,10 @@ class Lexer {
                 break;
             case '}':
                 tokens.push_back(TokenizeSpecial(TokenKind::CLOSE_CURLY));
-                break;              
+                break;
+            case '"':
+                tokens.push_back(TokenizeSpecial(TokenKind::QUOTATION_MARKS));
+                break;                 
             default:
                 std::cout << "UNIDENTIFIED: " << "(" << std::string(1,currentCharacter) << ")" << " ";
                 std::cout << "LINE NUMBER: " << lineNumber << " " << "CHARACTER NUMBER: " << characterNumber << std::endl;
