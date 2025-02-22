@@ -2,3 +2,10 @@
 "This is also a test"
 "And_this_to"
 "Test with some / in it"
+"This is a test with \n in it"
+"This is a test with two newlines
+
+
+in it"
+" Start with blank and contain '"
+"""This is a python docstring."""

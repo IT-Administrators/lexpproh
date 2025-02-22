@@ -85,6 +85,15 @@ class Lexer {
         }
     }
 
+    // Check if current character equals a newline character, if true increase linenumber.
+    void CatchNewLine() {
+        // Catch newline characters in strings.
+        if (currentCharacter == '\n')
+        {
+            lineNumber++;
+        }
+    }
+
     // Check if we have reached EOF.
     [[nodiscard]] const bool AtEof(){
         return Lexer::pos >= Lexer::input.length();        
@@ -122,6 +131,23 @@ class Lexer {
             return NewToken(TokenKind::FLOAT, buffer.str());
         }
         return NewToken(TokenKind::INT, buffer.str());
+    }
+
+    // Tokenize everything in inside double quotes.
+    // A string is defined as everything inside double quotes, except for other double quotes.
+    [[nodiscard]] const Token TokenizeString() {
+        std::stringstream buffer;
+        // Append character to buffer.
+        buffer << Advance();
+
+        while (std::regex_match(std::string(1,currentCharacter), std::regex("[^\"]")))
+        {
+            CatchNewLine();
+            // Append all other characters to buffer.
+            buffer << Advance();
+        }
+        buffer << Advance();
+        return NewToken(TokenKind::STRING, buffer.str());
     }
     
     // Tokenize comments to ignore them. Uses a regular expression to match comments.
@@ -162,9 +188,12 @@ class Lexer {
             {
                 tokens.push_back(TokenizeNumber());
                 continue;
-            }          
+            }
             switch (currentCharacter)
             {
+            case '"':
+                tokens.push_back(TokenizeString());
+                break;
             case '#':
                 TokenizeComment();
                 break;
@@ -218,13 +247,10 @@ class Lexer {
                 break;
             case '}':
                 tokens.push_back(TokenizeSpecial(TokenKind::CLOSE_CURLY));
-                break;
-            case '"':
-                tokens.push_back(TokenizeSpecial(TokenKind::QUOTATION_MARKS));
-                break;                 
+                break;               
             default:
-                std::cout << "UNIDENTIFIED: " << "(" << std::string(1,currentCharacter) << ")" << " ";
-                std::cout << "LINE NUMBER: " << lineNumber << " " << "CHARACTER NUMBER: " << characterNumber << std::endl;
+                std::cerr << "UNIDENTIFIED: " << "(" << std::string(1,currentCharacter) << ")" << " ";
+                std::cerr << "LINE NUMBER: " << lineNumber << " " << "CHARACTER NUMBER: " << characterNumber << std::endl;
                 exit(1);
             }
         }

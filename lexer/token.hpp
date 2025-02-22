@@ -48,6 +48,7 @@ enum class TokenKind {
     OPEN_CURLY,
     CLOSE_CURLY,
 
+    // Start of a string.
     QUOTATION_MARKS,
 
     UNKNOWN
