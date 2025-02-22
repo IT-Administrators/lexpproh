@@ -209,6 +209,10 @@ class Lexer {
             case '"':
                 tokens.push_back(TokenizeString());
                 break;
+            // Single quotes must be escaped.
+            case '\'':
+                tokens.push_back(TokenizeSpecial(TokenKind::SINGLE_QUOTE));
+                break;
             case '#':
                 TokenizeComment();
                 break;

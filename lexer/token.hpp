@@ -50,6 +50,7 @@ enum class TokenKind {
 
     // Start of a string.
     DOUBLE_QUOTES,
+    SINGLE_QUOTE,
 
     UNKNOWN
 };
@@ -119,6 +120,8 @@ std::string GetTokenKindName(TokenKind kind)
         return "CLOSE_CURLY";
     case TokenKind::DOUBLE_QUOTES:
         return "DOUBLE_QUOTES";
+    case TokenKind::SINGLE_QUOTE:
+        return "SINGLE_QUOTE";
     default:
         return "UNKNOWN";
     }
