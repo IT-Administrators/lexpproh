@@ -150,12 +150,29 @@ class Lexer {
 
     // Tokenize everything in inside double quotes.
     // A string is defined as everything inside double quotes, except for other double quotes.
-    [[nodiscard]] const Token TokenizeString() {
+    [[nodiscard]] const Token TokenizeStringDoubleQuotes() {
         std::stringstream buffer;
         // Append character to buffer.
         buffer << Advance();
 
         while (std::regex_match(std::string(1,currentCharacter), std::regex("[^\"]")))
+        {
+            CatchNewLine();
+            // Append all other characters to buffer.
+            buffer << Advance();
+        }
+        buffer << Advance();
+        return NewToken(TokenKind::STRING, buffer.str());
+    }
+
+    // Tokenize everything in inside single quotes.
+    // A string is defined as everything inside single quotes, except for other single quotes.
+    [[nodiscard]] const Token TokenizeStringSingleQuotes() {
+        std::stringstream buffer;
+        // Append character to buffer.
+        buffer << Advance();
+
+        while (std::regex_match(std::string(1,currentCharacter), std::regex("[^\']")))
         {
             CatchNewLine();
             // Append all other characters to buffer.
@@ -207,11 +224,11 @@ class Lexer {
             switch (currentCharacter)
             {
             case '"':
-                tokens.push_back(TokenizeString());
+                tokens.push_back(TokenizeStringDoubleQuotes());
                 break;
             // Single quotes must be escaped.
             case '\'':
-                tokens.push_back(TokenizeSpecial(TokenKind::SINGLE_QUOTE));
+                tokens.push_back(TokenizeStringSingleQuotes());
                 break;
             case '#':
                 TokenizeComment();

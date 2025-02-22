@@ -1,12 +1,40 @@
 "test"
-"This is also a test"
-"And_this_to"
-"Test with some / in it"
-"This is a test with \n in it"
+"This is also a test!"
+"And_this_to?"
+"Test with some / in it."
+"This is a test with '\n' in it!"
 "This is a test with two newlines
 
 
-in it"
+in it."
 " Start with blank and contain '"
 """This is a python docstring."""
-'test'
+
+'This is a test string in single quotes.'
+'And with \n character'
+'And with 
+
+
+two newlines in it.'
+'Single quotes containing "'
+'And with \r, \t, \n \"'
+
+str1 = """
+Roses are red
+Violets are blue"""
+
+# The following strings are byte-for-byte equivalent:
+str1 = "The quick brown fox jumps over the lazy dog."
+
+str2 = """
+The quick brown \
+
+
+  fox jumps over \
+    the lazy dog."""
+
+str3 = """\
+       The quick brown \
+       fox jumps over \
+       the lazy dog.\
+       """
