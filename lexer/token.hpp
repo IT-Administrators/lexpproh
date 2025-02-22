@@ -49,7 +49,7 @@ enum class TokenKind {
     CLOSE_CURLY,
 
     // Start of a string.
-    QUOTATION_MARKS,
+    DOUBLE_QUOTES,
 
     UNKNOWN
 };
@@ -117,8 +117,8 @@ std::string GetTokenKindName(TokenKind kind)
         return "OPEN_CURLY";
     case TokenKind::CLOSE_CURLY:
         return "CLOSE_CURLY";
-    case TokenKind::QUOTATION_MARKS:
-        return "QUOTATION_MARKS";
+    case TokenKind::DOUBLE_QUOTES:
+        return "DOUBLE_QUOTES";
     default:
         return "UNKNOWN";
     }
