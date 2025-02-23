@@ -98,12 +98,13 @@ class Lexer {
         }
     }
 
-    // Check if current character equals a newline character, if true increase linenumber.
+    // Check if current character equals a newline character, if true increase lineNumber and reset characterNumber.
     void CatchNewLine() {
         // Catch newline characters in strings.
         if (currentCharacter == '\n')
         {
             lineNumber++;
+            characterNumber = 1;
         }
     }
 
@@ -257,6 +258,10 @@ class Lexer {
             case '/':
                 tokens.push_back(TokenizeSpecial(TokenKind::SLASH));
                 break;
+            // Backslash must be escaped.
+            case '\\':
+                tokens.push_back(TokenizeSpecial(TokenKind::BACK_SLASH));
+                break;
             case '<':
                 tokens.push_back(TokenizeSpecial(TokenKind::LESSER));
                 break;
@@ -269,8 +274,20 @@ class Lexer {
             case '%':
                 tokens.push_back(TokenizeSpecial(TokenKind::MODULO));
                 break;
+            case '?':
+                tokens.push_back(TokenizeSpecial(TokenKind::QUESTION_MARK));
+                break;
+            case '!':
+                tokens.push_back(TokenizeSpecial(TokenKind::EXCLAMATION_MARK));
+                break;
             case '&':
                 tokens.push_back(TokenizeSpecial(TokenKind::AMPERSAND));
+                break;
+            case '|':
+                tokens.push_back(TokenizeSpecial(TokenKind::PIPE));
+                break;
+            case '^':
+                tokens.push_back(TokenizeSpecial(TokenKind::ROOF));
                 break;
             case '(':
                 tokens.push_back(TokenizeSpecial(TokenKind::OPEN_PAREN));

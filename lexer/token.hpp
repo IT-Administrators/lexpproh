@@ -34,11 +34,16 @@ enum class TokenKind {
     PLUS,
     MINUS,
     SLASH,
+    BACK_SLASH,
     LESSER,
     GREATER,
     MODULO,
+    QUESTION_MARK,
+    EXCLAMATION_MARK,
 
     AMPERSAND,
+    PIPE,
+    ROOF, // ^ 
 
     // Comments
     HASHTAG,
@@ -103,14 +108,24 @@ std::string GetTokenKindName(TokenKind kind)
         return "MINUS";
     case TokenKind::SLASH:
         return "SLASH";
+    case TokenKind::BACK_SLASH:
+        return "BACK_SLASH";
     case TokenKind::LESSER:
         return "LESSER";
     case TokenKind::GREATER:
         return "GREATER";
     case TokenKind::MODULO:
         return "MODULO";
+    case TokenKind::QUESTION_MARK:
+        return "QUESTION_MARK";
+    case TokenKind::EXCLAMATION_MARK:
+        return "EXCLAMATION_MARK";
     case TokenKind::AMPERSAND:
         return "AMPERSAND";
+    case TokenKind::PIPE:
+        return "PIPE";
+    case TokenKind::ROOF:
+        return "ROOF";
     case TokenKind::HASHTAG:
         return "HASHTAG";
     case TokenKind::OPEN_PAREN:
@@ -141,6 +156,6 @@ void PrintTokens(std::vector<Token> tokens) {
         counter++;
         std::cout << counter << ")" << " " << GetTokenKindName(temp.kind) << " " << "(" << temp.value<< ")" << std::endl;
     }
-}
+} 
 
 #endif

@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
     // Check if more than two arguments are provided.
     if (argc > 2)
     {
-        // Show wrogn arguments.
+        // Show wrong arguments.
         std::cerr << "Too many arguments: ";
         for (size_t i = 2; i < argc; i++)
         {
@@ -25,10 +25,21 @@ int main(int argc, char* argv[]) {
     }
     else
     {
-        // Check if provided argument is a directory. And lex all files.
-        if (std::filesystem::is_directory(argv[1]))
+        // Catch empty parameter.
+        const char* filepath;
+        if (argv[1] == NULL)
         {
-            for (const auto & entry : std::filesystem::directory_iterator(argv[1])) {
+            filepath = "./examples/";
+        }
+        else 
+        {
+            filepath = argv[1];
+        }
+
+        // Check if provided argument is a directory. And lex all files.
+        if (std::filesystem::is_directory(filepath))
+        {
+            for (const auto & entry : std::filesystem::directory_iterator(filepath)) {
         
                 std::cout << std::endl;
                 std::cout << "PROCESSING FILE: " << entry.path() << std::endl;
@@ -50,9 +61,9 @@ int main(int argc, char* argv[]) {
         else
         {
             // If provided argument is a file. Lex only provided file.
-            std::cout << "PROCESSING FILE: " << argv[1] << std::endl;
+            std::cout << "PROCESSING FILE: " << filepath << std::endl;
                 
-            std::ifstream sourcefilestream(argv[1]);
+            std::ifstream sourcefilestream(filepath);
             std::stringstream buffer;
             char temp;
     
