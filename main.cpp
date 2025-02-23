@@ -1,4 +1,4 @@
-// g++ main.cpp -o test.exe
+// g++ src/main.cpp -o test.exe
 
 #include "lexer/lexer.hpp"
 
@@ -58,7 +58,7 @@ int main(int argc, char* argv[]) {
                 PrintTokens(tokens);
             }
         }
-        else
+        else if (std::filesystem::is_regular_file(filepath))
         {
             // If provided argument is a file. Lex only provided file.
             std::cout << "PROCESSING FILE: " << filepath << std::endl;
@@ -75,7 +75,16 @@ int main(int argc, char* argv[]) {
             Lexer lexer(sourceCode);
             std::vector<Token> tokens = lexer.tokenize();
             PrintTokens(tokens);
-        } 
+        }
+        else
+        {
+            // If provided argument is a file. Lex only provided file.
+            std::cout << "PROCESSING STRING: " << argv[1] << std::endl;
+    
+            Lexer lexer(argv[1]);
+            std::vector<Token> tokens = lexer.tokenize();
+            PrintTokens(tokens);
+        }
     }
 
     return 0;
