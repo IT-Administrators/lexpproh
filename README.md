@@ -40,12 +40,12 @@ So a ```10.5``` for example would be a **FLOAT**.
 
 I used the following rules to define the token kinds:
 
-- INT: nondecimal number
+- INT: non decimal number
 - FLOAT: decimal number with "."
 - DOUBLE: currently not implemented
 - IDENTIFIER: a word not enclosed in double quotes
 - STRING: a word enclosed either in double quotes or single quotes
-- SPECIAL_CHARACTERS: are all other character where each one has its own token kind.
+- SPECIAL_CHARACTERS: are all other characters where each one has its own token kind.
 
 After the rules for token kinds are created, the programming definition of a token needs to be created.
 
@@ -112,7 +112,7 @@ This example would create the following output:
 ```
 As you can see a string is following the above defined rules for **STRINGS** and **IDENTIFIERS**.
 
-As a **STRING** is definied as a word inside single/doubles quotes the tokens for the same string could be:
+Because a **STRING** is definied as a word inside single/doubles quotes the tokens for the same string could also be:
 
 ```cpp
 1) DOUBLE_QUOTES (")
@@ -120,7 +120,9 @@ As a **STRING** is definied as a word inside single/doubles quotes the tokens fo
 3) DOUBLE_QUOTES (")
 4) IDENTIFIER (test)
 ```
-The different results depend on the rules the lexer is following. A reason not classify text inside quotes, for example enables for better error checking as a quote is classified separately, and not as part of a string.
+The different results depend on the rules the lexer is following. A reason not to classify text inside quotes, for example enables for better error checking as a quote is classified separately, and not as part of a string.
+
+After creating the tokens. The interpretation is done by the parser, which is not part of this project.
 
 ## License
 
