@@ -28,7 +28,7 @@ Lexing is a part of lexical analysis, where text is divided into different token
 
 ### How to lex
 
-The first step in creating a lexer is to define the rules on how to classify what token kinds are present.
+The first step in creating a lexer is to define the rules on, how to classify what token kinds are present.
 
 For example:
 
@@ -103,6 +103,7 @@ So the source text ```(10+5)*5=75``` would create the same tokens.
 
 Now an example with a string:
 ```cpp
+// Currently sub quoted strings are only supported if they are escaped.
 "\"test\"test"
 ```
 This example would create the following output:
@@ -112,7 +113,7 @@ This example would create the following output:
 ```
 As you can see a string is following the above defined rules for **STRINGS** and **IDENTIFIERS**.
 
-Because a **STRING** is definied as a word inside single/doubles quotes the tokens for the same string could also be:
+Because a **STRING** is definied as a word inside single/doubles quotes, the tokens for the same string could also be:
 
 ```cpp
 1) DOUBLE_QUOTES (")
@@ -121,6 +122,7 @@ Because a **STRING** is definied as a word inside single/doubles quotes the toke
 4) IDENTIFIER (test)
 ```
 The different results depend on the rules the lexer is following. A reason not to classify text inside quotes, for example enables for better error checking as a quote is classified separately, and not as part of a string.
+And might make handling expressions easier depending on their definition.
 
 After creating the tokens. The interpretation is done by the parser, which is not part of this project.
 
