@@ -21,7 +21,7 @@ lexpproh module.
 class Lexer {
     private:
         // String to be processed.
-        std::string input;
+        const std::string input;
         // Current position.
         int pos;
         // Current character.
@@ -109,7 +109,7 @@ class Lexer {
     }
 
     // Check if we have reached EOF.
-    [[nodiscard]] const bool AtEof(){
+    [[nodiscard]] const bool AtEof(){       
         return Lexer::pos >= Lexer::input.length();        
     }
 

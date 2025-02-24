@@ -24,7 +24,13 @@ This documentation will use the term lexer instead of tokenizer.
 
 ### What is lexing
 
-Lexing is a part of lexical analysis, where text is divided into different tokens, which are classified following a predefined logic. This logic has to follow the rules and syntax of the language/text that will be interpreted. 
+Lexing also called lexical analysis, divides a source text into different tokens, which are classified following a predefined logic. This logic has to follow the rules and syntax of the language/text that will be interpreted. A lexeme is a sequence of characters that form a token.
+
+| Token | Lexeme |
+| ----- | ------ |
+| INTEGER | 349,4,5,1 |
+| PLUS | + |
+| MINUS | - |
 
 ### How to lex
 
