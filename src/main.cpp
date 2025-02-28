@@ -78,7 +78,7 @@ int main(int argc, char* argv[]) {
         }
         else
         {
-            // If provided argument is a file. Lex only provided file.
+            // If provided argument is not a file nor a directory, lex provided string.
             std::cout << "PROCESSING STRING: " << argv[1] << std::endl;
     
             Lexer lexer(argv[1]);
