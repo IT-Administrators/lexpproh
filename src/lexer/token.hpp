@@ -13,7 +13,8 @@ lexpproh module.
 
 // Token kinds which can be processed.
 enum class TokenKind {
-    
+    _EOF,
+
     KEYWORD,
     IDENTIFIER,
     INT,
@@ -56,6 +57,8 @@ enum class TokenKind {
     OPEN_CURLY,
     CLOSE_CURLY,
 
+    UNDERSCORE,
+
     // Start of a string.
     DOUBLE_QUOTES,
     SINGLE_QUOTE,
@@ -80,6 +83,8 @@ const Token NewToken(TokenKind kind, std::string value){
 std::string GetTokenKindName(TokenKind kind)
 {
     switch (kind) {
+    case TokenKind::_EOF:
+        return "EOF";
     case TokenKind::KEYWORD:
         return "KEYWORD";
     case TokenKind::IDENTIFIER:
@@ -140,6 +145,8 @@ std::string GetTokenKindName(TokenKind kind)
         return "OPEN_CURLY";
     case TokenKind::CLOSE_CURLY:
         return "CLOSE_CURLY";
+    case TokenKind::UNDERSCORE:
+        return "UNDERSCORE";
     case TokenKind::DOUBLE_QUOTES:
         return "DOUBLE_QUOTES";
     case TokenKind::SINGLE_QUOTE:

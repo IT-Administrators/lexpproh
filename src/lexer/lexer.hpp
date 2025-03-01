@@ -118,7 +118,6 @@ class Lexer {
         std::stringstream buffer;
         // Append character to buffer.
         buffer << Advance();
-
         while (isalnum(currentCharacter) || currentCharacter == '_')
         {
             // Append all other characters to buffer.
@@ -198,6 +197,85 @@ class Lexer {
         return NewToken(kind, std::string(1,Advance()));
     }
 
+    // Get next character and create token from it.
+    [[nodiscard]] const Token GetNextToken() {
+        Skip();
+        if (isalpha(currentCharacter))
+        {
+            return TokenizeIdentifier();
+        }
+        if (isdigit(currentCharacter))
+        {
+            return TokenizeNumber();
+        }
+        switch (currentCharacter)
+        {
+        case '#':
+            TokenizeComment();
+            break;
+        case '"':
+            return TokenizeStringDoubleQuotes();
+        case '\'':
+            return TokenizeStringSingleQuotes();
+        case ';':
+            return TokenizeSpecial(TokenKind::SEMI_COLON);
+        case ':':
+            return TokenizeSpecial(TokenKind::COLON);
+        case ',':
+            return TokenizeSpecial(TokenKind::COMMA);
+        case '.':
+            return TokenizeSpecial(TokenKind::DOT);
+        case '*':
+            return TokenizeSpecial(TokenKind::MULT);
+        case '+':
+            return TokenizeSpecial(TokenKind::PLUS);
+        case '-':
+            return TokenizeSpecial(TokenKind::MINUS);
+        case '/':
+            return TokenizeSpecial(TokenKind::SLASH);
+        // Backslash must be escaped.
+        case '\\':
+            return TokenizeSpecial(TokenKind::BACK_SLASH);
+        case '<':
+            return TokenizeSpecial(TokenKind::LESSER);
+        case '>':
+            return TokenizeSpecial(TokenKind::GREATER);
+        case '=':
+            return TokenizeSpecial(TokenKind::EQUALS);
+        case '%':
+            return TokenizeSpecial(TokenKind::MODULO);
+        case '?':
+            return TokenizeSpecial(TokenKind::QUESTION_MARK);
+        case '!':
+            return TokenizeSpecial(TokenKind::EXCLAMATION_MARK);
+        case '&':
+            return TokenizeSpecial(TokenKind::AMPERSAND);
+        case '|':
+            return TokenizeSpecial(TokenKind::PIPE);
+        case '^':
+            return TokenizeSpecial(TokenKind::ROOF);
+        case '(':
+            return TokenizeSpecial(TokenKind::OPEN_PAREN);
+        case ')':
+            return TokenizeSpecial(TokenKind::CLOSE_PAREN);
+        case '[':
+            return TokenizeSpecial(TokenKind::OPEN_BRACK);
+        case ']':
+            return TokenizeSpecial(TokenKind::CLOSE_BRACK);
+        case '{':
+            return TokenizeSpecial(TokenKind::OPEN_CURLY);
+        case '}':
+            return TokenizeSpecial(TokenKind::CLOSE_CURLY);
+        case '_':
+            return TokenizeIdentifier();                 
+        default:
+            std::cerr << "UNIDENTIFIED: " << "(" << std::string(1,currentCharacter) << ")" << " ";
+            std::cerr << "LINE NUMBER: " << lineNumber << " " << "CHARACTER NUMBER: " << characterNumber << std::endl;
+            exit(1);
+        }
+        return NewToken(TokenKind::UNKNOWN,std::string(1,Advance()));
+    }
+
     public:
     // Lexer constructor.
     Lexer(std::string source)
@@ -211,108 +289,11 @@ class Lexer {
         std::vector<Token> tokens;
         while (!AtEof())
         {
-            Skip();
-            if (isalpha(currentCharacter) || currentCharacter == '_')
-            {
-                tokens.push_back(TokenizeIdentifier());
-                continue;
-            }
-            if (isdigit(currentCharacter))
-            {
-                tokens.push_back(TokenizeNumber());
-                continue;
-            }
-            switch (currentCharacter)
-            {
-            case '"':
-                tokens.push_back(TokenizeStringDoubleQuotes());
-                break;
-            // Single quotes must be escaped.
-            case '\'':
-                tokens.push_back(TokenizeStringSingleQuotes());
-                break;
-            case '#':
-                TokenizeComment();
-                break;
-            case ';':
-                tokens.push_back(TokenizeSpecial(TokenKind::SEMI_COLON));
-                break;
-            case ':':
-                tokens.push_back(TokenizeSpecial(TokenKind::COLON));
-                break;
-            case ',':
-                tokens.push_back(TokenizeSpecial(TokenKind::COMMA));
-                break;
-            case '.':
-                tokens.push_back(TokenizeSpecial(TokenKind::DOT));
-                break;
-            case '*':
-                tokens.push_back(TokenizeSpecial(TokenKind::MULT));
-                break;
-            case '+':
-                tokens.push_back(TokenizeSpecial(TokenKind::PLUS));
-                break;
-            case '-':
-                tokens.push_back(TokenizeSpecial(TokenKind::MINUS));
-                break;
-            case '/':
-                tokens.push_back(TokenizeSpecial(TokenKind::SLASH));
-                break;
-            // Backslash must be escaped.
-            case '\\':
-                tokens.push_back(TokenizeSpecial(TokenKind::BACK_SLASH));
-                break;
-            case '<':
-                tokens.push_back(TokenizeSpecial(TokenKind::LESSER));
-                break;
-            case '>':
-                tokens.push_back(TokenizeSpecial(TokenKind::GREATER));
-                break;
-            case '=':
-                tokens.push_back(TokenizeSpecial(TokenKind::EQUALS));
-                break;
-            case '%':
-                tokens.push_back(TokenizeSpecial(TokenKind::MODULO));
-                break;
-            case '?':
-                tokens.push_back(TokenizeSpecial(TokenKind::QUESTION_MARK));
-                break;
-            case '!':
-                tokens.push_back(TokenizeSpecial(TokenKind::EXCLAMATION_MARK));
-                break;
-            case '&':
-                tokens.push_back(TokenizeSpecial(TokenKind::AMPERSAND));
-                break;
-            case '|':
-                tokens.push_back(TokenizeSpecial(TokenKind::PIPE));
-                break;
-            case '^':
-                tokens.push_back(TokenizeSpecial(TokenKind::ROOF));
-                break;
-            case '(':
-                tokens.push_back(TokenizeSpecial(TokenKind::OPEN_PAREN));
-                break;
-            case ')':
-                tokens.push_back(TokenizeSpecial(TokenKind::CLOSE_PAREN));
-                break;
-            case '[':
-                tokens.push_back(TokenizeSpecial(TokenKind::OPEN_BRACK));
-                break;
-            case ']':
-                tokens.push_back(TokenizeSpecial(TokenKind::CLOSE_BRACK));
-                break;
-            case '{':
-                tokens.push_back(TokenizeSpecial(TokenKind::OPEN_CURLY));
-                break;
-            case '}':
-                tokens.push_back(TokenizeSpecial(TokenKind::CLOSE_CURLY));
-                break;               
-            default:
-                std::cerr << "UNIDENTIFIED: " << "(" << std::string(1,currentCharacter) << ")" << " ";
-                std::cerr << "LINE NUMBER: " << lineNumber << " " << "CHARACTER NUMBER: " << characterNumber << std::endl;
-                exit(1);
-            }
+            tokens.push_back(GetNextToken());
         }
+        // Append EOF token to signalize the end of the token stream. 
+        // This will be helpful when creating the ast.
+        tokens.push_back(NewToken(TokenKind::_EOF,"EOF"));
         return tokens;
     }
 };
