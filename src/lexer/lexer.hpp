@@ -313,6 +313,8 @@ class Lexer {
                 exit(1);
             }
         }
+        // Append EOF token to signalize end of token stream while AST creation.
+        tokens.push_back(NewToken(TokenKind::_EOF,"EOF"));
         return tokens;
     }
 };

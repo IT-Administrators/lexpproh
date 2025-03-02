@@ -13,7 +13,8 @@ lexpproh module.
 
 // Token kinds which can be processed.
 enum class TokenKind {
-    
+    _EOF,
+
     KEYWORD,
     IDENTIFIER,
     INT,
@@ -80,6 +81,8 @@ const Token NewToken(TokenKind kind, std::string value){
 std::string GetTokenKindName(TokenKind kind)
 {
     switch (kind) {
+    case TokenKind::_EOF:
+        return "EOF";
     case TokenKind::KEYWORD:
         return "KEYWORD";
     case TokenKind::IDENTIFIER:
