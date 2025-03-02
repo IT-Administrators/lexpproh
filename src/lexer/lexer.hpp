@@ -127,9 +127,9 @@ class Lexer {
         // Check if identified token equals keyword.
         if (CheckKey(keymap, buffer.str()))
         {
-            return NewToken(TokenKind::KEYWORD, buffer.str());
+            return NewToken(TokenKind::KEYWORD, buffer.str(), lineNumber, characterNumber);
         }
-        return NewToken(TokenKind::IDENTIFIER, buffer.str());
+        return NewToken(TokenKind::IDENTIFIER, buffer.str(), lineNumber, characterNumber);
     }
 
     // Tokenize Numbers. Differentiate between int and float.
@@ -144,9 +144,9 @@ class Lexer {
         // This delimiter must be changed depending on how floats are defined.
         if (buffer.str().find('.') != std::string::npos)
         {                     
-            return NewToken(TokenKind::FLOAT, buffer.str());
+            return NewToken(TokenKind::FLOAT, buffer.str(), lineNumber, characterNumber);
         }
-        return NewToken(TokenKind::INT, buffer.str());
+        return NewToken(TokenKind::INT, buffer.str(), lineNumber, characterNumber);
     }
 
     // Tokenize everything in inside double quotes.
@@ -163,7 +163,7 @@ class Lexer {
             buffer << Advance();
         }
         buffer << Advance();
-        return NewToken(TokenKind::STRING, buffer.str());
+        return NewToken(TokenKind::STRING, buffer.str(), lineNumber, characterNumber);
     }
 
     // Tokenize everything in inside single quotes.
@@ -180,7 +180,7 @@ class Lexer {
             buffer << Advance();
         }
         buffer << Advance();
-        return NewToken(TokenKind::STRING, buffer.str());
+        return NewToken(TokenKind::STRING, buffer.str(), lineNumber, characterNumber);
     }
     
     // Tokenize comments to ignore them. Uses a regular expression to match comments.
@@ -195,7 +195,7 @@ class Lexer {
 
     // Tokenize special characters. Appends current character and specified tokenkind to vector.
     [[nodiscard]] const Token TokenizeSpecial(TokenKind kind){
-        return NewToken(kind, std::string(1,Advance()));
+        return NewToken(kind, std::string(1,Advance()), lineNumber, characterNumber);
     }
 
     public:
@@ -314,7 +314,7 @@ class Lexer {
             }
         }
         // Append EOF token to signalize end of token stream while AST creation.
-        tokens.push_back(NewToken(TokenKind::_EOF,"EOF"));
+        tokens.push_back(NewToken(TokenKind::_EOF,"EOF", lineNumber, characterNumber));
         return tokens;
     }
 };

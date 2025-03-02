@@ -68,11 +68,20 @@ enum class TokenKind {
 struct Token {
     std::string value;
     TokenKind kind;
+    // Describes the position of the token in the input text.
+    int lineNumber;
+    int characterNumber;
 };
 
+// // Create a new token to append it to result vector.
+// const Token NewToken(TokenKind kind, std::string value){
+//     Token token{.value = value, .kind = kind};
+//     return token;
+// }
+
 // Create a new token to append it to result vector.
-const Token NewToken(TokenKind kind, std::string value){
-    Token token{.value = value, .kind = kind};
+const Token NewToken(TokenKind kind, std::string value, int lineNumber, int characterNumber){
+    Token token{.value = value, .kind = kind, .lineNumber = lineNumber, .characterNumber = characterNumber};
     return token;
 }
 
@@ -157,7 +166,7 @@ void PrintTokens(std::vector<Token> tokens) {
     int counter = 0;
     for (Token temp : tokens) {
         counter++;
-        std::cout << counter << ")" << " " << GetTokenKindName(temp.kind) << " " << "(" << temp.value<< ")" << std::endl;
+        std::cout << counter << ")" << " " << temp.lineNumber << "," << temp.characterNumber << " " << GetTokenKindName(temp.kind) << " " << "(" << temp.value << ")" << std::endl;
     }
 } 
 
